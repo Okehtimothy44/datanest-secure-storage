@@ -116,7 +116,7 @@
         details: details
       }
     )
-    (ok log-id)
+    true
   )
 )
 
@@ -213,7 +213,7 @@
               }
             )
             ;; Log the creation
-            (log-audit-event business-id document-id tx-sender ACTION-CREATE "Document created")
+            (log-audit-event business-id document-id tx-sender ACTION-CREATE u"Document created")
             (ok true)
           )
         )
@@ -252,7 +252,7 @@
               active: true
             }
           )
-          (log-audit-event business-id document-id tx-sender ACTION-EDIT "Document updated")
+          (log-audit-event business-id document-id tx-sender ACTION-EDIT u"Document updated")
           (ok true)
         )
       )
@@ -287,7 +287,7 @@
             document-id 
             tx-sender 
             ACTION-SHARE 
-            (concat "Permission granted to " (concat (to-ascii (unwrap-panic (principal-to-buff32 user))) (concat " with level " (uint-to-ascii permission-level))))
+            u"Permission granted to user"
           )
           (ok true)
         )
@@ -313,7 +313,7 @@
           document-id 
           tx-sender 
           ACTION-SHARE 
-          (concat "Permission revoked from " (to-ascii (unwrap-panic (principal-to-buff32 user))))
+          u"Permission revoked"
         )
         (ok true)
       )
@@ -331,7 +331,7 @@
     (if (not (document-exists business-id document-id))
       ERR-DOCUMENT-NOT-FOUND
       (begin
-        (log-audit-event business-id document-id tx-sender ACTION-VIEW "Document accessed")
+        (log-audit-event business-id document-id tx-sender ACTION-VIEW u"Document accessed")
         (ok true)
       )
     )
@@ -355,7 +355,7 @@
             { business-id: business-id, document-id: document-id }
             (merge (unwrap-panic document-data) { active: false })
           )
-          (log-audit-event business-id document-id tx-sender ACTION-DELETE "Document deleted")
+          (log-audit-event business-id document-id tx-sender ACTION-DELETE u"Document deleted")
           (ok true)
         )
       )
